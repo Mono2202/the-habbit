@@ -28,7 +28,7 @@ async def start(update: Update, context: ContextTypes.DEFAULT_TYPE):
         user_file_path = f"{USER_DATABASE_PATH}/{user.id}.json"
         await update.message.reply_text(f"Hi {user.name}! Welcome to your Habit Tracker! Let's start :)")
 
-        with open(user_file_path, "a+") as user_file:
+        with open(user_file_path, "w+") as user_file:
             json.dump(
                 {
                     "username": user.name,
@@ -37,7 +37,6 @@ async def start(update: Update, context: ContextTypes.DEFAULT_TYPE):
                 user_file,
                 indent=4
             )
-
 
 async def send_image(update: Update, context: ContextTypes.DEFAULT_TYPE):
     with open(".\\assets\\golbat.png", "rb") as img:

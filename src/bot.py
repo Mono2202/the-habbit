@@ -7,7 +7,7 @@ from telegram import BotCommand, Update
 from telegram.ext import ApplicationBuilder, CommandHandler, ContextTypes
 from datetime import datetime
 
-import commands
+from commands import COMMANDS
 
 from user import User
 
@@ -21,18 +21,30 @@ class TheHabbitBot():
         load_dotenv()
         self._bot_token = os.getenv("TELEGRAM_BOT_TOKEN")
         self._app = ApplicationBuilder().token(TOKEN).post_init(self._set_commands).build()
-        self._app.add_handler(CommandHandler("start", self.user_state(commands.start)))
-        self._app.add_handler(CommandHandler("add_habit", commands.add_habit))
     
     def run(self):
         self._app.run_polling()
     
-    async def _set_commands(self, app):
-        commands = [
-            BotCommand("start", "Start the bot"),
-            BotCommand("add_habit", "Send a sample image"),
-        ]
-        await app.bot.set_my_commands(commands)
+    @staticmethod
+    async def _set_commands(app):
+        bot_commands = []
+
+        for command in COMMANDS:
+            app.add_handler(
+                CommandHandler(
+                    command.name,
+                    TheHabbitBot.user_state(command.function)
+                )
+            )
+
+            bot_commands.append(
+                BotCommand(
+                    command.name,
+                    command.description
+                )
+            )
+
+        await app.bot.set_my_commands(bot_commands)
 
     @staticmethod
     def user_state(func):

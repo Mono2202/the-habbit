@@ -4,14 +4,10 @@
     "join_date": "01/05/2025",
     "habits": [
         {
-            "name": "Gym",
-            "frequency": "daily",
-            "points": 99
-        },
-        {
-            "name": "Projects",
-            "frequency": "weekly",
-            "points": 79
+            "name": "Gaming",
+            "icon": "🎮",
+            "frequency": "Daily",
+            "points": 100
         }
     ]
 }

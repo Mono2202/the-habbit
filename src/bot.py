@@ -5,10 +5,10 @@ from typing import Callable
 from functools import wraps
 from dotenv import load_dotenv
 from telegram import BotCommand, Update
-from telegram.ext import ApplicationBuilder, CommandHandler, ContextTypes, Application
+from telegram.ext import ApplicationBuilder, CommandHandler, ContextTypes, Application, CallbackQueryHandler
 from datetime import datetime
 
-from commands import COMMANDS
+from commands import COMMANDS, QUERY_HANDLERS
 
 from user import User
 
@@ -29,6 +29,10 @@ class TheHabbitBot():
     @staticmethod
     async def _set_commands(app: Application):
         bot_commands = []
+
+        for query_handler in QUERY_HANDLERS:
+            query_handler.callback=TheHabbitBot.user_state(query_handler.callback)
+            app.add_handler(query_handler)
 
         for command in COMMANDS:
             app.add_handler(

@@ -5,8 +5,6 @@ import commands
 
 from dotenv import load_dotenv
 
-from datetime import datetime
-
 from telegram import BotCommand
 from telegram.ext import ApplicationBuilder, CommandHandler, ContextTypes
 
@@ -16,7 +14,6 @@ load_dotenv()
 TOKEN = os.getenv("TELEGRAM_BOT_TOKEN")
 
 class TheHabbitBot():
-    USER_DATABASE_PATH = "./db"
 
     def __init__(self):
         load_dotenv()

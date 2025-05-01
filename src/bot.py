@@ -1,10 +1,11 @@
 import os
 import json
 
+from typing import Callable
 from functools import wraps
 from dotenv import load_dotenv
 from telegram import BotCommand, Update
-from telegram.ext import ApplicationBuilder, CommandHandler, ContextTypes
+from telegram.ext import ApplicationBuilder, CommandHandler, ContextTypes, Application
 from datetime import datetime
 
 from commands import COMMANDS
@@ -26,7 +27,7 @@ class TheHabbitBot():
         self._app.run_polling()
     
     @staticmethod
-    async def _set_commands(app):
+    async def _set_commands(app: Application):
         bot_commands = []
 
         for command in COMMANDS:
@@ -47,12 +48,14 @@ class TheHabbitBot():
         await app.bot.set_my_commands(bot_commands)
 
     @staticmethod
-    def user_state(func):
+    def user_state(func: Callable):
         @wraps(func)
         async def wrapper(update: Update, context: ContextTypes.DEFAULT_TYPE, *args, **kwargs):
             user = TheHabbitBot._get_user_data(update.effective_user.id, update.effective_user.name)
             context.user = user
+
             return_value = await func(update, context, *args, **kwargs)
+
             TheHabbitBot._save_user_data(user) 
             return return_value
         return wrapper

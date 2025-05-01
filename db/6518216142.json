@@ -1,5 +1,22 @@
 {
     "id": 6518216142,
     "username": "Mono",
-    "join_date": "01/05/2025"
+    "join_date": "01/05/2025",
+    "habits": [
+        {
+            "name": "Gaming",
+            "frequency": "daily",
+            "points": 10000
+        },
+        {
+            "name": "Gym",
+            "frequency": "daily",
+            "points": 99
+        },
+        {
+            "name": "Projects",
+            "frequency": "weekly",
+            "points": 79
+        }
+    ]
 }

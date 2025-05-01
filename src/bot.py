@@ -73,7 +73,8 @@ class TheHabbitBot():
             user = User(
                 id=user_id,
                 username=user_name,
-                join_date=datetime.today().strftime("%d/%m/%Y")
+                join_date=datetime.today().strftime("%d/%m/%Y"),
+                habits=[]
             )
             TheHabbitBot._save_user_data(user)
             return user

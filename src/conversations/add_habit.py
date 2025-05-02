@@ -1,7 +1,8 @@
 from telegram import InlineKeyboardButton, InlineKeyboardMarkup, Update
 from telegram.ext import MessageHandler, CallbackQueryHandler, ConversationHandler, filters, ContextTypes, CommandHandler
+from telegram.constants import ParseMode
 
-from user import User, Habit
+from user import Habit
 from utils import user_state, cancel
 
 ADD_HABIT_NAME, ADD_HABIT_ICON, CHOOSE_HABIT_FREQUENCY, SET_HABIT_POINTS = range(4)
@@ -13,18 +14,21 @@ FREQUENCIES = [
     "Monthly",
 ]
 
+# TODO: add input checks for each function
+
 @user_state
 async def add_habit_handle_button(update: Update, context: ContextTypes.DEFAULT_TYPE):
     query = update.callback_query
     await query.answer()
 
-    await query.message.reply_text("What's the name of the habit you want to add?")
+    await query.message.reply_text("What's the `name` of the habit you want to add? 🤔", parse_mode=ParseMode.MARKDOWN)
     return ADD_HABIT_NAME
 
 @user_state
 async def add_habit_receive_name(update: Update, context: ContextTypes.DEFAULT_TYPE):
+    # TODO: I could change it to a Habit class, but should I?
     context.user_data["habit_name"] = update.message.text
-    await update.message.reply_text("Choose an icon")
+    await update.message.reply_text("Choose an `icon` for the new habit! 🖼️", parse_mode=ParseMode.MARKDOWN)
     return ADD_HABIT_ICON
 
 @user_state
@@ -36,7 +40,7 @@ async def add_habit_receive_icon(update: Update, context: ContextTypes.DEFAULT_T
             InlineKeyboardButton(frequency, callback_data=f"frequency:{frequency}")
         ])
     reply_markup = InlineKeyboardMarkup(keyboard)    
-    await update.message.reply_text("Frequencies", reply_markup=reply_markup)
+    await update.message.reply_text("Choose the `frequency` of the habit 📈", reply_markup=reply_markup, parse_mode=ParseMode.MARKDOWN)
     return CHOOSE_HABIT_FREQUENCY
 
 @user_state
@@ -45,12 +49,15 @@ async def add_habit_receive_frequency(update: Update, context: ContextTypes.DEFA
     await query.answer()
 
     context.user_data["habit_frequency"] = query.data.split(":", 1)[1]
+    await query.message.reply_text(f"You chose: `{context.user_data["habit_frequency"]}` 🥵", parse_mode=ParseMode.MARKDOWN)
 
-    await query.message.reply_text("How many points?")
+    # TODO: maybe change the name from points to something more appealing...
+    await query.message.reply_text("How many `points` for completing the habit? 💯", parse_mode=ParseMode.MARKDOWN)
     return SET_HABIT_POINTS
 
 @user_state
 async def add_habit_receive_points(update: Update, context: ContextTypes.DEFAULT_TYPE):
+    # TODO: limit the points?
     context.user_data["habit_points"] = int(update.message.text)
 
     context.user.habits.append(Habit(
@@ -60,7 +67,7 @@ async def add_habit_receive_points(update: Update, context: ContextTypes.DEFAULT
         points=context.user_data["habit_points"],
     ))
 
-    await update.message.reply_text("Habit added successfully!")
+    await update.message.reply_text(f"✅ Habit `{context.user_data["habit_name"]} {context.user_data["habit_icon"]}` added successfully!", parse_mode=ParseMode.MARKDOWN)
 
 def add_habit_get_handler():
     return ConversationHandler(

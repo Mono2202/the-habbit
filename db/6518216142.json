@@ -1,4 +1,15 @@
 {
+    "id": 6518216142,
     "username": "Mono",
-    "join_date": "30/04/2025"
+    "join_date": "03/05/2025",
+    "habits": [
+        {
+            "name": "Gym",
+            "icon": "💪",
+            "steps": 1,
+            "unit": "Workout",
+            "frequency": "Daily",
+            "points": 10
+        }
+    ]
 }

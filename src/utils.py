@@ -11,6 +11,7 @@ from the_habbit import User
 
 USER_DATABASE_PATH = "./db"
 
+# TODO: add print keyboard of list habits?
 async def cancel(update: Update, context: ContextTypes.DEFAULT_TYPE):
     await update.message.reply_text("Operation cancelled")
     return ConversationHandler.END
@@ -39,6 +40,7 @@ def _get_user_data(user_id: int, user_name: str):
             id=user_id,
             username=user_name,
             join_date=datetime.today().strftime("%d/%m/%Y"),
+            xp=0,
             habits=[]
         )
         _save_user_data(user)

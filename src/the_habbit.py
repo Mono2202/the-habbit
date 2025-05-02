@@ -8,9 +8,12 @@ class Habit(BaseModel):
     unit: str
     frequency: str
     points: int
+    status: int
+    rewarded: bool
 
 class User(BaseModel):
     id: int
     username: str
     join_date: str
+    xp: int
     habits: List[Habit]

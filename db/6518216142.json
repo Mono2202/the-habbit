@@ -2,6 +2,7 @@
     "id": 6518216142,
     "username": "Mono",
     "join_date": "03/05/2025",
+    "xp": 20,
     "habits": [
         {
             "name": "Gym",
@@ -9,7 +10,9 @@
             "steps": 1,
             "unit": "Workout",
             "frequency": "Daily",
-            "points": 10
+            "points": 10,
+            "status": 0,
+            "rewarded": false
         }
     ]
 }

@@ -2,10 +2,10 @@ from telegram import InlineKeyboardButton, InlineKeyboardMarkup, Update
 from telegram.ext import MessageHandler, CallbackQueryHandler, ConversationHandler, filters, ContextTypes, CommandHandler
 from telegram.constants import ParseMode
 
-from user import Habit
+from the_habbit import Habit
 from utils import user_state, cancel
 
-ADD_HABIT_NAME, ADD_HABIT_ICON, CHOOSE_HABIT_FREQUENCY, SET_HABIT_POINTS = range(4)
+ADD_HABIT_NAME, ADD_HABIT_ICON, CHOOSE_HABIT_STEPS, SET_HABIT_UNIT, CHOOSE_HABIT_FREQUENCY, SET_HABIT_POINTS = range(6)
 
 FREQUENCIES = [
     "Daily",
@@ -31,6 +31,17 @@ async def add_habit_receive_name(update: Update, context: ContextTypes.DEFAULT_T
 
 async def add_habit_receive_icon(update: Update, context: ContextTypes.DEFAULT_TYPE):
     context.user_data["habit_icon"] = update.message.text
+    await update.message.reply_text("Choose the `steps` needed to complete the habit (Can be negative for breaking a habit) 🪜", parse_mode=ParseMode.MARKDOWN)
+    return CHOOSE_HABIT_STEPS
+
+async def add_habit_receive_steps(update: Update, context: ContextTypes.DEFAULT_TYPE):
+    context.user_data["habit_steps"] = int(update.message.text)
+    await update.message.reply_text("Choose the `unit` of the `steps` (e.g. ₪, Bottles...)", parse_mode=ParseMode.MARKDOWN)
+    return SET_HABIT_UNIT
+
+async def add_habit_receive_unit(update: Update, context: ContextTypes.DEFAULT_TYPE):
+    context.user_data["habit_unit"] = update.message.text
+
     keyboard = []
     for frequency in FREQUENCIES:
         keyboard.append([
@@ -59,6 +70,8 @@ async def add_habit_receive_points(update: Update, context: ContextTypes.DEFAULT
     context.user.habits.append(Habit(
         name=context.user_data["habit_name"],
         icon=context.user_data["habit_icon"],
+        steps=context.user_data["habit_steps"],
+        unit=context.user_data["habit_unit"],
         frequency=context.user_data["habit_frequency"],
         points=context.user_data["habit_points"],
     ))
@@ -72,6 +85,8 @@ def add_habit_get_handler():
         states={
             ADD_HABIT_NAME: [MessageHandler(filters.TEXT & ~filters.COMMAND, add_habit_receive_name)],
             ADD_HABIT_ICON: [MessageHandler(filters.TEXT & ~filters.COMMAND, add_habit_receive_icon)],
+            CHOOSE_HABIT_STEPS: [MessageHandler(filters.TEXT & ~filters.COMMAND, add_habit_receive_steps)],
+            SET_HABIT_UNIT: [MessageHandler(filters.TEXT & ~filters.COMMAND, add_habit_receive_unit)],
             CHOOSE_HABIT_FREQUENCY: [CallbackQueryHandler(add_habit_receive_frequency, pattern=r"^frequency:")],
             SET_HABIT_POINTS: [MessageHandler(filters.TEXT & ~filters.COMMAND, add_habit_receive_points)],
         },

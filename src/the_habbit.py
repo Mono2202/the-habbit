@@ -1,11 +1,11 @@
 from pydantic import BaseModel
 from typing import List
 
-# TODO: change module name
-
 class Habit(BaseModel):
     name: str
     icon: str
+    steps: int # Minus to break a habit
+    unit: str
     frequency: str
     points: int
 

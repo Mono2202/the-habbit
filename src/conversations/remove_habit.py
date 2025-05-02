@@ -1,8 +1,7 @@
-from telegram import InlineKeyboardButton, InlineKeyboardMarkup, Update
+from telegram import Update
 from telegram.ext import MessageHandler, CallbackQueryHandler, ConversationHandler, filters, ContextTypes, CommandHandler
 from telegram.constants import ParseMode
 
-from user import Habit
 from utils import user_state, cancel
 
 REMOVE_HABIT = range(1)

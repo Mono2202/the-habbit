@@ -7,7 +7,7 @@ from telegram import Update
 from telegram.ext import ContextTypes, ConversationHandler
 from datetime import datetime
 
-from user import User
+from the_habbit import User
 
 USER_DATABASE_PATH = "./db"
 

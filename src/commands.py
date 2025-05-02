@@ -3,8 +3,6 @@ from telegram import Update, InlineKeyboardButton, InlineKeyboardMarkup
 from telegram.ext import ContextTypes, CallbackQueryHandler
 from telegram.constants import ParseMode
 
-from user import Habit
-
 from conversations.add_habit import add_habit_get_handler
 from conversations.remove_habit import remove_habit_get_handler
 

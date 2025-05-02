@@ -12,7 +12,7 @@ from user import User
 USER_DATABASE_PATH = "./db"
 
 async def cancel(update: Update, context: ContextTypes.DEFAULT_TYPE):
-    await update.message.reply_text("Operation cancelled.")
+    await update.message.reply_text("Operation cancelled")
     return ConversationHandler.END
 
 def user_state(func: Callable):

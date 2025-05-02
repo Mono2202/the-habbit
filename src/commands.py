@@ -6,6 +6,8 @@ from telegram.constants import ParseMode
 from user import Habit
 
 from conversations.add_habit import add_habit_get_handler
+from conversations.remove_habit import remove_habit_get_handler
+
 from utils import user_state
 
 class Command():
@@ -31,7 +33,7 @@ async def list_habits(update: Update, context: ContextTypes.DEFAULT_TYPE):
             InlineKeyboardButton(f"✅", callback_data=f"complete:{i}"),
             InlineKeyboardButton(f"✏️", callback_data=f"edit:{i}"),
             InlineKeyboardButton(f"✏️", callback_data=f"edit:{i}"),
-            InlineKeyboardButton(f"✏️", callback_data=f"edit:{i}"),
+            InlineKeyboardButton(f"🗑️", callback_data=f"remove:{i}"),
         ]
         keyboard.append([InlineKeyboardButton(f"{habit.icon} {habit.name}", callback_data=f"statistics:{i}")])
         keyboard.append(row)
@@ -65,4 +67,5 @@ COMMANDS = [
 HANDLERS = [
     CallbackQueryHandler(complete_habit, pattern=r"^complete:"),
     add_habit_get_handler(),
+    remove_habit_get_handler(),
 ]

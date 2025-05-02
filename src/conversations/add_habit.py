@@ -16,7 +16,6 @@ FREQUENCIES = [
 
 # TODO: add input checks for each function
 
-@user_state
 async def add_habit_handle_button(update: Update, context: ContextTypes.DEFAULT_TYPE):
     query = update.callback_query
     await query.answer()
@@ -24,14 +23,12 @@ async def add_habit_handle_button(update: Update, context: ContextTypes.DEFAULT_
     await query.message.reply_text("What's the `name` of the habit you want to add? 🤔", parse_mode=ParseMode.MARKDOWN)
     return ADD_HABIT_NAME
 
-@user_state
 async def add_habit_receive_name(update: Update, context: ContextTypes.DEFAULT_TYPE):
     # TODO: I could change it to a Habit class, but should I?
     context.user_data["habit_name"] = update.message.text
     await update.message.reply_text("Choose an `icon` for the new habit! 🖼️", parse_mode=ParseMode.MARKDOWN)
     return ADD_HABIT_ICON
 
-@user_state
 async def add_habit_receive_icon(update: Update, context: ContextTypes.DEFAULT_TYPE):
     context.user_data["habit_icon"] = update.message.text
     keyboard = []
@@ -43,7 +40,6 @@ async def add_habit_receive_icon(update: Update, context: ContextTypes.DEFAULT_T
     await update.message.reply_text("Choose the `frequency` of the habit 📈", reply_markup=reply_markup, parse_mode=ParseMode.MARKDOWN)
     return CHOOSE_HABIT_FREQUENCY
 
-@user_state
 async def add_habit_receive_frequency(update: Update, context: ContextTypes.DEFAULT_TYPE):
     query = update.callback_query
     await query.answer()
@@ -68,10 +64,11 @@ async def add_habit_receive_points(update: Update, context: ContextTypes.DEFAULT
     ))
 
     await update.message.reply_text(f"✅ Habit `{context.user_data["habit_name"]} {context.user_data["habit_icon"]}` added successfully!", parse_mode=ParseMode.MARKDOWN)
+    return ConversationHandler.END
 
 def add_habit_get_handler():
     return ConversationHandler(
-        entry_points=[CallbackQueryHandler(add_habit_handle_button, pattern="add")],
+        entry_points=[CallbackQueryHandler(add_habit_handle_button, pattern=r"^add")],
         states={
             ADD_HABIT_NAME: [MessageHandler(filters.TEXT & ~filters.COMMAND, add_habit_receive_name)],
             ADD_HABIT_ICON: [MessageHandler(filters.TEXT & ~filters.COMMAND, add_habit_receive_icon)],

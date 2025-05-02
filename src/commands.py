@@ -3,7 +3,10 @@ from telegram import Update, InlineKeyboardButton, InlineKeyboardMarkup
 from telegram.ext import ContextTypes, CallbackQueryHandler
 from telegram.constants import ParseMode
 
-from user import User, Habit
+from user import Habit
+
+from conversations.add_habit import add_habit_get_handler
+from utils import user_state
 
 class Command():
     def __init__(self, function: Callable, description: str):
@@ -12,21 +15,15 @@ class Command():
         self.description = description
 
 # TODO: build the keyboard of habits
-def build_habits_keyboard():
+# def build_habits_keyboard():
 
+@user_state
 async def start(update: Update, context: ContextTypes.DEFAULT_TYPE):
     await update.message.reply_text(f"👋 Welcome *{context.user.username}* to  `The Habbit`  🧙‍♂️🪄!", parse_mode=ParseMode.MARKDOWN)
 
-async def add_habit(update: Update, context: ContextTypes.DEFAULT_TYPE):
-    # TODO: add exception handling
-    context.user.habits.append(Habit(
-        name=context.args[0],
-        icon=context.args[1],
-        frequency=context.args[2],
-        points=context.args[3]
-    ))
-    await update.message.reply_text(f"✅ Habit `{context.args[0]}` saved successfully!", parse_mode=ParseMode.MARKDOWN)
+    #await update.message.reply_text(f"✅ Habit `{context.args[0]}` saved successfully!", parse_mode=ParseMode.MARKDOWN)
 
+@user_state
 async def list_habits(update: Update, context: ContextTypes.DEFAULT_TYPE):
     keyboard = []
     for i, habit in enumerate(context.user.habits):
@@ -38,9 +35,11 @@ async def list_habits(update: Update, context: ContextTypes.DEFAULT_TYPE):
         ]
         keyboard.append([InlineKeyboardButton(f"{habit.icon} {habit.name}", callback_data=f"statistics:{i}")])
         keyboard.append(row)
+    keyboard.append([InlineKeyboardButton(f"+", callback_data="add")])
     reply_markup = InlineKeyboardMarkup(keyboard)
     await update.message.reply_text("~~~ Habits ~~~", reply_markup=reply_markup)
 
+@user_state
 async def remove_habit(update: Update, context: ContextTypes.DEFAULT_TYPE):
     # TODO: add input check
     try:
@@ -51,6 +50,7 @@ async def remove_habit(update: Update, context: ContextTypes.DEFAULT_TYPE):
     except Exception:
         await update.message.reply_text(f"❌ Invalid command", parse_mode=ParseMode.MARKDOWN)
 
+@user_state
 async def complete_habit(update: Update, context: ContextTypes.DEFAULT_TYPE):
     query = update.callback_query
     await query.answer()
@@ -59,12 +59,10 @@ async def complete_habit(update: Update, context: ContextTypes.DEFAULT_TYPE):
     await query.edit_message_text(f"You chose: {context.user.habits[habit_index].name}")
 
 COMMANDS = [
-    Command(start, "Starts the bot"),
-    Command(add_habit, "Adds a new habit"),
-    Command(remove_habit, "Removes a habit"),
     Command(list_habits, "List all habits"),
 ]
 
-QUERY_HANDLERS = [
-    CallbackQueryHandler(complete_habit, pattern=r"^complete:")
+HANDLERS = [
+    CallbackQueryHandler(complete_habit, pattern=r"^complete:"),
+    add_habit_get_handler(),
 ]

@@ -8,6 +8,12 @@
             "icon": "🎮",
             "frequency": "Daily",
             "points": 100
+        },
+        {
+            "name": "a",
+            "icon": "a",
+            "frequency": "Daily",
+            "points": 10
         }
     ]
 }

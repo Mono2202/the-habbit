@@ -75,7 +75,7 @@ async def add_habit_receive_points(update: Update, context: ContextTypes.DEFAULT
         frequency=context.user_data["habit_frequency"],
         points=context.user_data["habit_points"],
         status=0,
-        rewarded=false
+        rewarded=False
     ))
 
     await update.message.reply_text(f"✅ Habit `{context.user_data["habit_name"]} {context.user_data["habit_icon"]}` added successfully!", parse_mode=ParseMode.MARKDOWN)

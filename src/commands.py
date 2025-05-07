@@ -22,6 +22,7 @@ class Command():
 async def start(update: Update, context: ContextTypes.DEFAULT_TYPE):
     await update.message.reply_text(f"👋 Welcome *{context.user.username}* to  `The Habbit`  🧙‍♂️🪄!", parse_mode=ParseMode.MARKDOWN)
 
+# TODO: print this after each conversation end
 @user_state
 async def list_habits(update: Update, context: ContextTypes.DEFAULT_TYPE):
     keyboard = []
@@ -33,7 +34,7 @@ async def list_habits(update: Update, context: ContextTypes.DEFAULT_TYPE):
             InlineKeyboardButton(f"🗑️", callback_data=f"remove:{i}"),
         ]
         info_row = [
-            InlineKeyboardButton(f"{habit.icon} {habit.name}", callback_data=f"info:{i}"),
+            InlineKeyboardButton(f"{habit.name} {habit.icon}", callback_data=f"info:{i}"),
             InlineKeyboardButton(f"{habit.status} / {habit.steps} {habit.unit} {"🟢" if habit.status >= habit.steps else "️⭕"}", callback_data=f"status:{i}"),
         ]
         keyboard.append(info_row)

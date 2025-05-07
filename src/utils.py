@@ -1,5 +1,6 @@
 import os
 import json
+import csv
 
 from typing import Callable
 from functools import wraps
@@ -44,6 +45,11 @@ def _get_user_data(user_id: int, user_name: str):
             habits=[]
         )
         _save_user_data(user)
+
+        with open(f"{USER_DATABASE_PATH}/{user_id}.csv", mode="w", newline="", encoding="utf-8") as csv_file:
+            writer = csv.writer(csv_file)
+            writer.writerow(["date", "name", "icon", "steps", "unit", "frequency", "points", "status", "rewarded"])
+
         return user
 
     with open(user_file_path, "r") as user_fd:

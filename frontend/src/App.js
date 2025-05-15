@@ -1,28 +1,24 @@
-import React, { useState } from 'react';
+import React from "react";
+import { BrowserRouter as Router, Routes, Route, Link } from "react-router-dom";
+import LevelPage from "./pages/LevelPage";
+import "./styles.css";
+// import ProfilePage from "./pages/ProfilePage";
 
 function App() {
-  const [response, setResponse] = useState(null);
-
-  const sendData = async () => {
-    try {
-      const res = await fetch('http://localhost:5000/api/get_xp', {
-        method: 'GET',
-      });
-
-      const result = await res.json();
-      setResponse(result);
-    } catch (err) {
-      console.error('Error:', err);
-      setResponse('Error sending data');
-    }
-  };
-
   return (
-    <div style={{ padding: 20 }}>
-      <h1>React → Flask API</h1>
-      <button onClick={sendData}>Send Data</button>
-      {response && <p>Response: {response["xp"]}</p>}
-    </div>
+    <Router>
+      <div className="container">
+        <nav className="navbar">
+          <Link to="/">Level Page</Link>
+          <Link to="/profile">Profile Page</Link>
+        </nav>
+
+        <Routes>
+          <Route path="/" element={<LevelPage />} />
+          {/* <Route path="/profile" element={<ProfilePage />} /> */}
+        </Routes>
+      </div>
+    </Router>
   );
 }
 

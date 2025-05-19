@@ -1,11 +1,10 @@
 import React, { useEffect, useState } from "react";
-import "../components/PhotoGallery"
 import PhotoGallery from "../components/PhotoGallery";
+import './LevelPage.css';
 
 function LevelPage() {
   const level = 5;
   const xpToNextLevel = 50;
-  const backend_url = "http://127.0.0.1:5000"
 
   const [user_xp, setUserXP] = useState(0);
   const [percentage, setPercentage] = useState(0);
@@ -17,7 +16,7 @@ function LevelPage() {
 
   async function getUserXP() {
     try {
-        const result = await fetch(backend_url + "/api/get_xp");
+        const result = await fetch(process.env.REACT_APP_BACKEND_URL + "/api/get_xp");
         const json_result = await result.json();
         setUserXP(json_result["xp"]);
         setPercentage((user_xp / xpToNextLevel) * 100);

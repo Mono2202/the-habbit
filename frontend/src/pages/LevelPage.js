@@ -1,25 +1,35 @@
 import React, { useEffect, useState } from "react";
 import PhotoGallery from "../components/PhotoGallery";
+import LoadingWheel from "../components/LoadingWheel";
 import './LevelPage.css';
 
 function LevelPage() {
-  const level = 5;
-  const xpToNextLevel = 50;
-
-  const [user_xp, setUserXP] = useState(0);
+  const [xp, setXP] = useState(0);
   const [percentage, setPercentage] = useState(0);
+  const [goal_xp, setGoalXP] = useState(50);
+  const [level, setLevel] = useState(0);
+
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    getUserXP();
-  });
+    getXP();
+  }, []);
 
-  async function getUserXP() {
+  async function getXP() {
     try {
-        const result = await fetch(process.env.REACT_APP_BACKEND_URL + "/api/get_xp");
-        const json_result = await result.json();
-        setUserXP(json_result["xp"]);
-        setPercentage((user_xp / xpToNextLevel) * 100);
+        const xp_result = await fetch(process.env.REACT_APP_BACKEND_URL + "/api/xp/get_xp");
+        const xp_result_json = await xp_result.json();
+        setXP(xp_result_json["xp"]);
+
+        const goal_xp_result = await fetch(process.env.REACT_APP_BACKEND_URL + "/api/xp/get_goal_xp");
+        const goal_xp_result_json = await goal_xp_result.json();
+        setGoalXP(goal_xp_result_json["goal_xp"]);
+
+        const level_result = await fetch(process.env.REACT_APP_BACKEND_URL + "/api/xp/get_level");
+        const level_result_json = await level_result.json();
+        setLevel(level_result_json["level"]);
+
+        setPercentage((xp_result_json["xp"] / goal_xp_result_json["goal_xp"]) * 100);
     } catch (err) {
         console.error("Error:", err);
     } finally {
@@ -28,7 +38,7 @@ function LevelPage() {
   }
 
   if (loading) {
-    return <div>Loading...</div>
+    return <LoadingWheel />
   }
 
   else {
@@ -44,10 +54,10 @@ function LevelPage() {
         <div className="progress-container">
             <div className="progress-bar" style={{ width: `${percentage}%` }}></div>
         </div>
-        <p>{user_xp} / {xpToNextLevel} XP</p>
+        <p>{xp} / {goal_xp} XP</p>
         </div>
 
-        <div><PhotoGallery /></div>
+        {/* <div><PhotoGallery /></div> */}
         </>
     );
   }

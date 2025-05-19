@@ -8,6 +8,7 @@
 .gallery-title {
   font-size: 2rem;
   margin-bottom: 1rem;
+  color: #ffffff;
 }
 
 .gallery-grid {
@@ -21,6 +22,7 @@
   border-radius: 12px;
   box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
   transition: transform 0.3s ease;
+  background: #1e1e1e;
 }
 
 .gallery-item:hover {

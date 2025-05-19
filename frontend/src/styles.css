@@ -28,15 +28,6 @@ a {
   color: #38acff;
 }
 
-.level-page {
-  text-align: center;
-  background: rgb(30, 30, 30);
-  color: rgb(237, 237, 237);
-  padding: 30px;
-  border-radius: 10px;
-  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-}
-
 .profile-pic {
   width: 120px;
   height: 120px;

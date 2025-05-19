@@ -1,8 +1,9 @@
 import json
 
-from flask import Flask, jsonify
-from flask_cors import CORS
 from functools import wraps
+
+from flask import Flask, jsonify, request, Response
+from flask_cors import CORS
 
 app = Flask(__name__)
 CORS(app)
@@ -28,18 +29,29 @@ def get_level():
 def get_xp():
     return jsonify({"xp": f"{app.config["user"]["xp"]}"})
 
-@app.route("/api/xp/get_goal_xp")
+@app.route("/api/xp/get_xp_goal")
 @user_context
-def get_goal_xp():
-    return jsonify({"goal_xp": 50})
+def get_xp_goal():
+    return jsonify({"xp_goal": f"{app.config["user"]["xp_goal"]}"})
 
-@app.route("/api/add_<xp>")
+@app.route("/api/xp/gain_xp", methods=["GET"])
 @user_context
-def gain_xp(xp):
-    global user_xp
-    user_xp += int(xp)
-    print(user_xp)
-    return jsonify({"XP GAIN": f"{xp}"})
+def gain_xp():
+    xp_to_add = request.args.get("xp", type=int)
+
+    if xp_to_add is None:
+        return jsonify({"error": "Missing xp"}), 400
+    
+    gain_xp_handle(xp_to_add)
+    return Response(status=200)
+
+def gain_xp_handle(xp_to_add: int):
+    app.config["user"]["xp"] += xp_to_add
+    app.config["user"]["overall_xp"] += xp_to_add
+
+    while app.config["user"]["xp"] >= app.config["user"]["xp_goal"]:
+        app.config["user"]["level"] += 1
+        app.config["user"]["xp"] -= app.config["user"]["xp_goal"]
 
 if __name__ == "__main__":
     app.run(host="0.0.0.0", debug=True, port=5003)

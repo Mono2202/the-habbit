@@ -1,5 +1,6 @@
 {
     "level": 1,
-    "xp": 1,
-    "overall_xp": 0
+    "xp": 0,
+    "overall_xp": 0,
+    "xp_goal": 35
 }

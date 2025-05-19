@@ -6,13 +6,16 @@ import './LevelPage.css';
 function LevelPage() {
   const [xp, setXP] = useState(0);
   const [percentage, setPercentage] = useState(0);
-  const [goal_xp, setGoalXP] = useState(50);
+  const [xp_goal, setXPGoal] = useState(50);
   const [level, setLevel] = useState(0);
 
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     getXP();
+
+    const interval = setInterval(getXP, 5000);
+    return () => clearInterval(interval);
   }, []);
 
   async function getXP() {
@@ -21,15 +24,15 @@ function LevelPage() {
         const xp_result_json = await xp_result.json();
         setXP(xp_result_json["xp"]);
 
-        const goal_xp_result = await fetch(process.env.REACT_APP_BACKEND_URL + "/api/xp/get_goal_xp");
-        const goal_xp_result_json = await goal_xp_result.json();
-        setGoalXP(goal_xp_result_json["goal_xp"]);
+        const xp_goal_result = await fetch(process.env.REACT_APP_BACKEND_URL + "/api/xp/get_xp_goal");
+        const xp_goal_result_json = await xp_goal_result.json();
+        setXPGoal(xp_goal_result_json["xp_goal"]);
 
         const level_result = await fetch(process.env.REACT_APP_BACKEND_URL + "/api/xp/get_level");
         const level_result_json = await level_result.json();
         setLevel(level_result_json["level"]);
 
-        setPercentage((xp_result_json["xp"] / goal_xp_result_json["goal_xp"]) * 100);
+        setPercentage((xp_result_json["xp"] / xp_goal_result_json["xp_goal"]) * 100);
     } catch (err) {
         console.error("Error:", err);
     } finally {
@@ -54,7 +57,7 @@ function LevelPage() {
         <div className="progress-container">
             <div className="progress-bar" style={{ width: `${percentage}%` }}></div>
         </div>
-        <p>{xp} / {goal_xp} XP</p>
+        <p>{xp} / {xp_goal} XP</p>
         </div>
 
         {/* <div><PhotoGallery /></div> */}

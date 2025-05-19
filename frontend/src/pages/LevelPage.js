@@ -1,4 +1,6 @@
 import React, { useEffect, useState } from "react";
+import "../components/PhotoGallery"
+import PhotoGallery from "../components/PhotoGallery";
 
 function LevelPage() {
   const level = 5;
@@ -32,6 +34,7 @@ function LevelPage() {
 
   else {
     return (
+        <>
         <div className="level-page">
         <img
             src="https://art.pixilart.com/7b2d1341e20f674.png"
@@ -44,6 +47,9 @@ function LevelPage() {
         </div>
         <p>{user_xp} / {xpToNextLevel} XP</p>
         </div>
+
+        <div><PhotoGallery /></div>
+        </>
     );
   }
 }

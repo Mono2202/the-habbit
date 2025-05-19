@@ -2,6 +2,7 @@ import React from "react";
 import { BrowserRouter as Router, Routes, Route, Link } from "react-router-dom";
 import LevelPage from "./pages/LevelPage";
 import "./styles.css";
+import "./fonts/JetBrainsMono.ttf"
 // import ProfilePage from "./pages/ProfilePage";
 
 function App() {

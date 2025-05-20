@@ -19,7 +19,8 @@ tmux send-keys -t $SESSION:1 'cd /home/mono/projects/the-habbit/backend && pytho
 
 # Start frontend in another window
 tmux new-window -t $SESSION -n 'frontend'
-tmux send-keys -t $SESSION:2 'cd /home/mono/projects/the-habbit/frontend && npm run build' C-m
+tmux send-keys -t $SESSION:2 'cd /home/mono/projects/the-habbit/frontend && pip install -r requirements.txt --break-system-packages' C-m
+tmux send-keys -t $SESSION:2 'npm run build' C-m
 tmux send-keys -t $SESSION:2 'serve -s build -l 5002' C-m
 
 echo "Deployment started in tmux session: $SESSION"

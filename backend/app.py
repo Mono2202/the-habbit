@@ -8,6 +8,13 @@ from flask_cors import CORS
 app = Flask(__name__)
 CORS(app)
 
+HABIT_DIFFICULTIES = {
+    "Easy": 1,
+    "Medium": 3,
+    "Hard": 5,
+    "Extreme": 10
+}
+
 def user_context(func):
     @wraps(func)
     def wrapper(*args, **kwargs):
@@ -43,6 +50,17 @@ def gain_xp():
         return jsonify({"error": "Missing xp"}), 400
     
     gain_xp_handle(xp_to_add)
+    return Response(status=200)
+
+@app.route("/api/xp/complete_habit", methods=["GET"])
+@user_context
+def complete_habit():
+    habit_difficulty = request.args.get("difficulty", type=str)
+
+    if habit_difficulty is None:
+        return jsonify({"error": "Missing habit difficulty"}), 400
+    
+    gain_xp_handle(HABIT_DIFFICULTIES[habit_difficulty])
     return Response(status=200)
 
 def gain_xp_handle(xp_to_add: int):

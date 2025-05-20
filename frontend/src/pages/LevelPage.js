@@ -1,25 +1,41 @@
 import React, { useEffect, useState } from "react";
+import { PICTURES } from '../consts/ImageFiles';
 import PhotoGallery from "../components/PhotoGallery";
+import LoadingWheel from "../components/LoadingWheel";
 import './LevelPage.css';
 
 function LevelPage() {
-  const level = 5;
-  const xpToNextLevel = 50;
-
-  const [user_xp, setUserXP] = useState(0);
+  const [xp, setXP] = useState(0);
   const [percentage, setPercentage] = useState(0);
+  const [xp_goal, setXPGoal] = useState(50);
+  const [level, setLevel] = useState(0);
+
   const [loading, setLoading] = useState(true);
 
-  useEffect(() => {
-    getUserXP();
-  });
+  const [selectedPhoto, setSelectedPhoto] = useState(null);
 
-  async function getUserXP() {
+  useEffect(() => {
+    getXP();
+
+    const interval = setInterval(getXP, 5000);
+    return () => clearInterval(interval);
+  }, []);
+
+  async function getXP() {
     try {
-        const result = await fetch(process.env.REACT_APP_BACKEND_URL + "/api/get_xp");
-        const json_result = await result.json();
-        setUserXP(json_result["xp"]);
-        setPercentage((user_xp / xpToNextLevel) * 100);
+        const xp_result = await fetch(process.env.REACT_APP_BACKEND_URL + "/api/xp/get_xp");
+        const xp_result_json = await xp_result.json();
+        setXP(xp_result_json["xp"]);
+
+        const xp_goal_result = await fetch(process.env.REACT_APP_BACKEND_URL + "/api/xp/get_xp_goal");
+        const xp_goal_result_json = await xp_goal_result.json();
+        setXPGoal(xp_goal_result_json["xp_goal"]);
+
+        const level_result = await fetch(process.env.REACT_APP_BACKEND_URL + "/api/xp/get_level");
+        const level_result_json = await level_result.json();
+        setLevel(level_result_json["level"]);
+
+        setPercentage((xp_result_json["xp"] / xp_goal_result_json["xp_goal"]) * 100);
     } catch (err) {
         console.error("Error:", err);
     } finally {
@@ -27,16 +43,28 @@ function LevelPage() {
     }
   }
 
+  const handlePhotoClick = (photoPath) => {
+    setSelectedPhoto(photoPath);
+  };
+
   if (loading) {
-    return <div>Loading...</div>
+    return <LoadingWheel />
   }
 
   else {
+    if (selectedPhoto == null) {
+      const filteredPics = PICTURES.filter(pic => {
+        const levelNumber = parseInt(pic.split('_')[0].split('/').at(-1));
+        return levelNumber === (parseInt(level));
+      });
+      setSelectedPhoto(filteredPics[0]);
+    }
+
     return (
         <>
         <div className="level-page">
         <img
-            src="https://art.pixilart.com/7b2d1341e20f674.png"
+            src={selectedPhoto}
             alt="Profile"
             className="profile-pic"
         />
@@ -44,10 +72,10 @@ function LevelPage() {
         <div className="progress-container">
             <div className="progress-bar" style={{ width: `${percentage}%` }}></div>
         </div>
-        <p>{user_xp} / {xpToNextLevel} XP</p>
+        <p>{xp} / {xp_goal} XP</p>
         </div>
 
-        <div><PhotoGallery /></div>
+        <div><PhotoGallery level={level} onPhotoClick={handlePhotoClick}/></div>
         </>
     );
   }

@@ -34,4 +34,18 @@
   height: 100%;
   object-fit: cover;
   display: block;
+  transform: translateY(-5px);
+}
+
+.hidden-gallery-item {
+  background: #464646
+}
+
+.hidden-gallery-item img {
+  opacity: 0.3;
+  transition: opacity 0.8s ease;
+}
+
+.hidden-gallery-item:hover img {
+  opacity: 1;
 }

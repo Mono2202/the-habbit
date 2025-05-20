@@ -1,26 +1,34 @@
 import React from 'react';
 import './PhotoGallery.css';
+import { PICTURES } from '../consts/ImageFiles';
 
-const photos = [
-  '/assets/sprites/alakazam.png',
-  '/assets/sprites/alakazam.png',
-  '/assets/sprites/alakazam.png',
-  '/assets/sprites/alakazam.png',
-  '/assets/sprites/alakazam.png',
-  '/assets/sprites/alakazam.png',
-  '/assets/sprites/alakazam.png',
-];
+function PhotoGallery({level, onPhotoClick}) {
 
-function PhotoGallery() {
+  const filteredPics = PICTURES.filter(pic => {
+    const levelNumber = parseInt(pic.split('_')[0].split('/').at(-1));
+    return levelNumber <= level;
+  });
+
+  const lastPic = filteredPics.pop();
+
   return (
     <div className="gallery-container">
       <h2 className="gallery-title">Gallery</h2>
       <div className="gallery-grid">
-        {photos.map((src, index) => (
+        {filteredPics.map((src, index) => (
           <div className="gallery-item" key={index}>
-            <img src={src} loading="lazy" />
+            <img 
+              src={src}
+              loading="lazy"
+              onClick={() => onPhotoClick(src)}/>
           </div>
         ))}
+        <div className="gallery-item hidden-gallery-item">
+          <img 
+            src={lastPic}
+            loading="lazy"
+            onClick={() => onPhotoClick(lastPic)}/>
+        </div>
       </div>
     </div>
   );

@@ -42,6 +42,16 @@ function LevelPage() {
         setLoading(false);
     }
   }
+  
+  useEffect(() => {
+    if (selectedPhoto == null) {
+      const filteredPics = PICTURES.filter(pic => {
+        const levelNumber = parseInt(pic.split('_')[0].split('/').at(-1));
+        return levelNumber === (parseInt(level));
+      });
+      setSelectedPhoto(filteredPics[0]);
+    }
+  }, [selectedPhoto, level])
 
   const handlePhotoClick = (photoPath) => {
     setSelectedPhoto(photoPath);
@@ -52,14 +62,6 @@ function LevelPage() {
   }
 
   else {
-    if (selectedPhoto == null) {
-      const filteredPics = PICTURES.filter(pic => {
-        const levelNumber = parseInt(pic.split('_')[0].split('/').at(-1));
-        return levelNumber === (parseInt(level));
-      });
-      setSelectedPhoto(filteredPics[0]);
-    }
-
     return (
         <>
         <div className="level-page">

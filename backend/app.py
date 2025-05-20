@@ -29,17 +29,17 @@ def user_context(func):
 @app.route("/api/xp/get_level")
 @user_context
 def get_level():
-    return jsonify({"level": f"{app.config["user"]["level"]}"})
+    return jsonify({"level": app.config["user"]["level"]})
 
 @app.route("/api/xp/get_xp")
 @user_context
 def get_xp():
-    return jsonify({"xp": f"{app.config["user"]["xp"]}"})
+    return jsonify({"xp": app.config["user"]["xp"]})
 
 @app.route("/api/xp/get_xp_goal")
 @user_context
 def get_xp_goal():
-    return jsonify({"xp_goal": f"{app.config["user"]["xp_goal"]}"})
+    return jsonify({"xp_goal": app.config["user"]["xp_goal"]})
 
 @app.route("/api/xp/gain_xp", methods=["GET"])
 @user_context

@@ -12,6 +12,8 @@ function LevelPage() {
 
   const [loading, setLoading] = useState(true);
 
+  const [selectedPhoto, setSelectedPhoto] = useState(null);
+
   useEffect(() => {
     getXP();
 
@@ -41,22 +43,28 @@ function LevelPage() {
     }
   }
 
+  const handlePhotoClick = (photoPath) => {
+    setSelectedPhoto(photoPath);
+  };
+
   if (loading) {
     return <LoadingWheel />
   }
 
   else {
-
-    const filteredPics = PICTURES.filter(pic => {
-      const levelNumber = parseInt(pic.split('_')[0].split('/').at(-1));
-      return levelNumber === (parseInt(level));
-    });
+    if (selectedPhoto == null) {
+      const filteredPics = PICTURES.filter(pic => {
+        const levelNumber = parseInt(pic.split('_')[0].split('/').at(-1));
+        return levelNumber === (parseInt(level));
+      });
+      setSelectedPhoto(filteredPics[0]);
+    }
 
     return (
         <>
         <div className="level-page">
         <img
-            src={filteredPics[0]}
+            src={selectedPhoto}
             alt="Profile"
             className="profile-pic"
         />
@@ -67,7 +75,7 @@ function LevelPage() {
         <p>{xp} / {xp_goal} XP</p>
         </div>
 
-        <div><PhotoGallery level={level}/></div>
+        <div><PhotoGallery level={level} onPhotoClick={handlePhotoClick}/></div>
         </>
     );
   }

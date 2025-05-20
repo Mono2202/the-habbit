@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from "react";
+import { PICTURES } from '../consts/ImageFiles';
 import PhotoGallery from "../components/PhotoGallery";
 import LoadingWheel from "../components/LoadingWheel";
 import './LevelPage.css';
@@ -45,11 +46,17 @@ function LevelPage() {
   }
 
   else {
+
+    const filteredPics = PICTURES.filter(pic => {
+      const levelNumber = parseInt(pic.split('_')[0].split('/').at(-1));
+      return levelNumber === (parseInt(level));
+    });
+
     return (
         <>
         <div className="level-page">
         <img
-            src="https://art.pixilart.com/7b2d1341e20f674.png"
+            src={filteredPics[0]}
             alt="Profile"
             className="profile-pic"
         />
@@ -60,7 +67,7 @@ function LevelPage() {
         <p>{xp} / {xp_goal} XP</p>
         </div>
 
-        {/* <div><PhotoGallery /></div> */}
+        <div><PhotoGallery level={level}/></div>
         </>
     );
   }

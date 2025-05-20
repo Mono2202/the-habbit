@@ -5,10 +5,55 @@
   padding: 30px;
   border-radius: 10px;
   box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+  margin-bottom: 30px;
 }
 
 .profile-pic {
   width: 40%;
   height: 40%;
   margin-bottom: 15px;
+}
+
+.dark-buttons {
+  display: flex;
+  gap: 1rem;
+  text-align: center;
+  justify-content: center;
+}
+
+.dark-button {
+  font-family: 'JetBrains';
+  padding: 0.75rem 1.5rem;
+  font-weight: bold;
+  color: white;
+  border: none;
+  border-radius: 0.5rem;
+  cursor: pointer;
+  transition: transform 0.1s ease, box-shadow 0.3s ease;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+}
+
+.dark-button:active {
+  transform: scale(0.95);
+}
+
+.dark-button:hover {
+  box-shadow: 0 0 10px rgba(255, 255, 255, 0.2);
+}
+
+/* Custom difficulty colors */
+.dark-button.easy {
+  background-color: #2e7d32;
+}
+
+.dark-button.medium {
+  background-color: #f9a825;
+}
+
+.dark-button.hard {
+  background-color: #ef6c00;
+}
+
+.dark-button.extreme {
+  background-color: #b71c1c;
 }

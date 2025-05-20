@@ -11,10 +11,10 @@ function LevelPage() {
     xp_goal: 50,
     level: 0,
   });
-
   const [loading, setLoading] = useState(true);
-
   const [selectedPhoto, setSelectedPhoto] = useState(null);
+
+  const difficulties = ["Easy", "Medium", "Hard", "Extreme"];
 
   useEffect(() => {
     getXP();
@@ -22,24 +22,6 @@ function LevelPage() {
     const interval = setInterval(getXP, 5000);
     return () => clearInterval(interval);
   }, []);
-
-  async function getXP() {
-    try {
-        const user_info_result = await fetch(process.env.REACT_APP_BACKEND_URL + "/api/xp/get_user_info");
-        const user_info_result_json = await user_info_result.json();
-        setUserInfo({
-          xp: user_info_result_json["xp"],
-          xp_goal: user_info_result_json["xp_goal"],
-          level: user_info_result_json["level"],
-          percentage: (user_info_result_json["xp"] / user_info_result_json["xp_goal"]) * 100,
-        });
-
-    } catch (err) {
-        console.error("Error:", err);
-    } finally {
-        setLoading(false);
-    }
-  }
   
   useEffect(() => {
     if (selectedPhoto == null) {
@@ -51,9 +33,38 @@ function LevelPage() {
     }
   }, [selectedPhoto, user_info.level])
 
+  async function getXP() {
+    try {
+        const user_info_result = await fetch(process.env.REACT_APP_BACKEND_URL + "/api/xp/get_user_info");
+        const user_info_result_json = await user_info_result.json();
+        setUserInfo({
+          xp: user_info_result_json["xp"],
+          xp_goal: user_info_result_json["xp_goal"],
+          level: user_info_result_json["level"],
+          percentage: (user_info_result_json["xp"] / user_info_result_json["xp_goal"]) * 100,
+        });
+    } catch (err) {
+        console.error("Error:", err);
+    } finally {
+        setLoading(false);
+    }
+  }
+
   const handlePhotoClick = (photoPath) => {
     setSelectedPhoto(photoPath);
   };
+
+  const sendHabit = (difficulty) => {
+    fetch(process.env.REACT_APP_BACKEND_URL + `/api/xp/complete_habit?difficulty=${difficulty}`)
+    .then((res) => {
+      if (!res.ok) throw new Error("API error");
+      getXP();
+    })
+    .catch((err) => {
+      console.error("Failed to complete habit:", err);
+    });
+  };
+
 
   if (loading) {
     return <LoadingWheel />
@@ -73,6 +84,18 @@ function LevelPage() {
             <div className="progress-bar" style={{ width: `${user_info.percentage}%` }}></div>
         </div>
         <p>{user_info.xp} / {user_info.xp_goal} XP</p>
+        </div>
+
+        <div className="dark-buttons">
+          {difficulties.map((difficulty) => (
+          <button
+            key={difficulty}
+            onClick={() => sendHabit(difficulty)}
+            className={`dark-button ${difficulty.toLowerCase()}`}
+          >
+          {difficulty}
+          </button>
+          ))}
         </div>
 
         <div><PhotoGallery level={user_info.level} onPhotoClick={handlePhotoClick}/></div>

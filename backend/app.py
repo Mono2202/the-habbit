@@ -1,6 +1,7 @@
 import json
 
 from functools import wraps
+from filelock import FileLock
 
 from flask import Flask, jsonify, request, Response
 from flask_cors import CORS
@@ -15,14 +16,17 @@ HABIT_DIFFICULTIES = {
     "Extreme": 10
 }
 
+DB_LOCK = FileLock("db.json.lock")
+
 def user_context(func):
     @wraps(func)
     def wrapper(*args, **kwargs):
-        with open("db.json", "r") as db_file:
-            app.config["user"] = json.load(db_file)
-        result = func(*args, **kwargs)
-        with open("db.json", "w") as db_file:
-            json.dump(app.config["user"], db_file, indent=4)
+        with DB_LOCK:
+            with open("db.json", "r") as db_file:
+                app.config["user"] = json.load(db_file)
+            result = func(*args, **kwargs)
+            with open("db.json", "w") as db_file:
+                json.dump(app.config["user"], db_file, indent=4)
         return result
     return wrapper
 
@@ -40,6 +44,16 @@ def get_xp():
 @user_context
 def get_xp_goal():
     return jsonify({"xp_goal": app.config["user"]["xp_goal"]})
+
+@app.route("/api/xp/get_user_info")
+@user_context
+def get_user_info():
+    user_info = {
+        "level": app.config["user"]["level"],
+        "xp": app.config["user"]["xp"],
+        "xp_goal": app.config["user"]["xp_goal"],
+    }
+    return jsonify(user_info)
 
 @app.route("/api/xp/gain_xp", methods=["GET"])
 @user_context

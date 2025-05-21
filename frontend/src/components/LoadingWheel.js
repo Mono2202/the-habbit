@@ -1,5 +1,5 @@
-import React from 'react';
-import './LoadingWheel.css';
+import React from "react";
+import "./LoadingWheel.css";
 
 function LoadingWheel() {
   return (

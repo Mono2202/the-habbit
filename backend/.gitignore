@@ -174,4 +174,5 @@ cython_debug/
 .pypirc
 
 # DB
-./db*
+db.json
+db.json.lock

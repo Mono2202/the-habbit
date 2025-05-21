@@ -1,11 +1,10 @@
-import React from 'react';
-import './PhotoGallery.css';
-import { PICTURES } from '../consts/ImageFiles';
+import React from "react";
+import "./PhotoGallery.css";
+import { PICTURES } from "../consts/ImageFiles";
 
-function PhotoGallery({level, onPhotoClick}) {
-
-  const filteredPics = PICTURES.filter(pic => {
-    const levelNumber = parseInt(pic.split('_')[0].split('/').at(-1));
+function PhotoGallery({ level, onPhotoClick }) {
+  const filteredPics = PICTURES.filter((pic) => {
+    const levelNumber = parseInt(pic.split("_")[0].split("/").at(-1));
     return levelNumber <= level;
   });
 
@@ -17,21 +16,19 @@ function PhotoGallery({level, onPhotoClick}) {
       <div className="gallery-grid">
         {filteredPics.map((src, index) => (
           <div className="gallery-item" key={index}>
-            <img 
-              src={src}
-              loading="lazy"
-              onClick={() => onPhotoClick(src)}/>
+            <img src={src} loading="lazy" onClick={() => onPhotoClick(src)} />
           </div>
         ))}
         <div className="gallery-item hidden-gallery-item">
-          <img 
+          <img
             src={lastPic}
             loading="lazy"
-            onClick={() => onPhotoClick(lastPic)}/>
+            onClick={() => onPhotoClick(lastPic)}
+          />
         </div>
       </div>
     </div>
   );
-};
+}
 
 export default PhotoGallery;

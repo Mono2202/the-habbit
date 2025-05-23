@@ -56,6 +56,7 @@ function LevelPage() {
     }
 
     if (user_info.level > prevLevel.current) {
+      playAudioPath("fnaf_yay")
       setShowConfetti(true);
       setTimeout(() => setShowConfetti(false), 2000);
     }
@@ -67,7 +68,13 @@ function LevelPage() {
     setSelectedPhoto(photoPath);
   };
 
+  const playAudioPath = (name) => {
+    const audio = new Audio(`/sounds/${name}.mp3`);
+    audio.play();
+  };
+
   const sendHabit = (difficulty) => {
+    playAudioPath("vine_boom");
     fetch(
       process.env.REACT_APP_BACKEND_URL +
         `/api/xp/complete_habit?difficulty=${difficulty}`

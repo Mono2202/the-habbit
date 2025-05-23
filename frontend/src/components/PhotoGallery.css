@@ -1,11 +1,6 @@
 .gallery-container {
   background-color: #e2cece00;
   color: #000000;
-  min-height: 100vh;
-  width: 70vw;
-  left: 50%;
-  position: relative;
-  transform: translateX(-50%);
 }
 
 .gallery-title {

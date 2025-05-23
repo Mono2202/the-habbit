@@ -17,6 +17,7 @@
 
 .gallery-grid {
   display: grid;
+  min-height: 10vh;
   grid-template-columns: repeat(auto-fill, minmax(100px, 1fr));
   gap: 1rem;
 }

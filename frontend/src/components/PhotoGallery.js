@@ -1,4 +1,4 @@
-import React from "react";
+import { React, useEffect } from "react";
 import "./PhotoGallery.css";
 import { PICTURES } from "../consts/ImageFiles";
 
@@ -10,20 +10,27 @@ function PhotoGallery({ level, onPhotoClick }) {
 
   const lastPic = filteredPics.pop();
 
+  useEffect(() => {
+    const timeout = setTimeout(() => {
+      window.dispatchEvent(new Event('resize'));
+    }, 300);
+    return () => clearTimeout(timeout);
+  }, []);
+
   return (
     <div className="gallery-container">
       <h2 className="gallery-title">Gallery</h2>
       <div className="gallery-grid">
         {filteredPics.map((src, index) => (
           <div className="gallery-item" key={index}>
-            <img src={src} loading="lazy" onClick={() => onPhotoClick(src)} />
+            <img src={src} onClick={() => onPhotoClick(src)} alt={lastPic} />
           </div>
         ))}
         <div className="gallery-item hidden-gallery-item">
           <img
             src={lastPic}
-            loading="lazy"
             onClick={() => onPhotoClick(lastPic)}
+            alt={lastPic}
           />
         </div>
       </div>

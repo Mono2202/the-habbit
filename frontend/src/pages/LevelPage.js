@@ -74,7 +74,6 @@ function LevelPage() {
   };
 
   const sendHabit = (difficulty) => {
-    playAudioPath("vine_boom");
     fetch(
       process.env.REACT_APP_BACKEND_URL +
         `/api/xp/complete_habit?difficulty=${difficulty}`

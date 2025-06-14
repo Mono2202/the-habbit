@@ -1,0 +1,44 @@
+@font-face {
+  font-family: "JetBrains";
+  src: local("JetBrainsMono"),
+    url("./fonts/JetBrainsMono.ttf") format("truetype");
+}
+
+body {
+  font-family: 'JetBrains';
+  margin: 0;
+  padding: 0;
+  background: #353535;
+}
+
+.container {
+  padding: 20px;
+  max-width: 700px;
+  margin: 0 auto;
+}
+
+.navbar {
+  display: flex;
+  gap: 40px;
+  margin-bottom: 30px;
+}
+
+a {
+  text-decoration: none;
+  color: #38acff;
+}
+
+
+.progress-container {
+  height: 20px;
+  background: #f0f0f0;
+  border-radius: 10px;
+  overflow: hidden;
+  margin: 10px 0;
+}
+
+.progress-bar {
+  height: 100%;
+  background: #4caf50;
+  transition: width 0.3s ease;
+}
